@@ -98,6 +98,10 @@ public class PickpocketInfoOverlay extends OverlayPanel
                     .right((String.format("%d",plugin.getBestStreak())))
                     .build());
             }
+            panelComponent.getChildren().add(LineComponent.builder()
+                .left("Average Streak")
+                .right((String.format("%.2f",plugin.getAverageStreak())))
+                .build());
             if(config.showCurrentStreak())
             {
                 panelComponent.getChildren().add(LineComponent.builder()

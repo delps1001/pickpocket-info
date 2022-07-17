@@ -1,6 +1,7 @@
 package com.diabolickal.pickpocketinfo;
 
 import com.google.inject.Provides;
+import java.util.ArrayList;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.*;
@@ -39,6 +40,8 @@ public class PickpocketInfoPlugin extends Plugin
     private int bestStreak = 0;
     @Getter
     private int currentStreak = 0;
+    private double streakSum = 0;
+    private int numStreaks = 0;
 
     private static final Pattern DODGY_CHECK_PATTERN = Pattern.compile(
             "Your dodgy necklace has (\\d+) charges? left\\.");
@@ -133,6 +136,8 @@ public class PickpocketInfoPlugin extends Plugin
         targetHasPouches = false;
         currentStreak = 0;
         bestStreak = 0;
+        streakSum = 0;
+        numStreaks = 0;
     }
 
 
@@ -215,6 +220,8 @@ public class PickpocketInfoPlugin extends Plugin
         }
         if (msg.contains("been stunned"))
         {
+            numStreaks++;
+            streakSum += currentStreak;
             currentStreak = 0;
         }
     }
@@ -229,6 +236,8 @@ public class PickpocketInfoPlugin extends Plugin
         targetHasPouches = false;
         currentStreak = 0;
         bestStreak = 0;
+        streakSum = 0;
+        numStreaks = 0;
     }
 
     //Encapsulation stuff
@@ -259,5 +268,12 @@ public class PickpocketInfoPlugin extends Plugin
     }
     public int brokenDodgy(){return  brokenDodgy;}
     public int totalPouches(){return  totalPouches;}
+
+    public double getAverageStreak() {
+        if (numStreaks > 0) {
+            return this.streakSum / numStreaks;
+        }
+        return this.currentStreak;
+    }
 
 }
